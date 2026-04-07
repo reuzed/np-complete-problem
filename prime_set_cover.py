@@ -44,13 +44,6 @@ def main() -> None:
         default="ilp",
         help="solver: greedy, ILP (CBC), exact bitmask (tiny only), or all",
     )
-    parser.add_argument(
-        "--ilp-max-sets",
-        type=int,
-        default=15_000,
-        metavar="M",
-        help="skip ILP if number of lines exceeds this (default: 15000)",
-    )
     args = parser.parse_args()
     if args.count < 2:
         raise SystemExit("need at least 2 points")
@@ -81,11 +74,6 @@ def main() -> None:
         describe(g)
 
     def run_ilp() -> None:
-        if m_lines > args.ilp_max_sets:
-            print(
-                f"ilp: skipped ({m_lines} sets > --ilp-max-sets {args.ilp_max_sets})"
-            )
-            return
         opt = ilp_set_cover(universe, subsets, costs)
         print(
             "ILP:  ",
